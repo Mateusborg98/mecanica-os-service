@@ -1,0 +1,66 @@
+name: OS CI
+on:
+  push:
+    branches: [main, 'codex/**']
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_DB: mecanica_os
+          POSTGRES_USER: mecanica_os
+          POSTGRES_PASSWORD: mecanica_os_local
+        ports: ['15434:5432']
+        options: >-
+          --health-cmd "pg_isready -U mecanica_os -d mecanica_os"
+          --health-interval 5s --health-timeout 5s --health-retries 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+          cache: maven
+      - run: chmod +x mvnw
+      - run: ./mvnw -B clean verify
+        env:
+          RUN_OS_POSTGRES_TESTS: 'true'
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: os-test-reports
+          path: |
+            target/surefire-reports
+            target/site/jacoco
+            target/pmd.xml
+            target/reports/pmd.html
+      - run: docker build -t mecanica-os-service:ci .
+
+  manifests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate Kubernetes manifests
+        run: |
+          set -euo pipefail
+          kubectl kustomize k8s > /tmp/app.yaml
+          docker run --rm -i ghcr.io/yannh/kubeconform:v0.7.0 -strict -summary -kubernetes-version 1.36.0 < /tmp/app.yaml
+      - name: Validate shared platform manifests
+        run: |
+          set -euo pipefail
+          kubectl kustomize infra/fase4/platform > /tmp/platform.yaml
+          docker run --rm -i ghcr.io/yannh/kubeconform:v0.7.0 -strict -summary -kubernetes-version 1.36.0 < /tmp/platform.yaml
+      - uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.15.8
+      - name: Validate Terraform without provisioning
+        working-directory: infra/fase4
+        run: |
+          terraform fmt -check
+          terraform init -backend=false -input=false
+          terraform validate
