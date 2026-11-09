@@ -1,0 +1,67 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mecanica-os-service
+spec:
+  replicas: 1
+  revisionHistoryLimit: 3
+  strategy:
+    type: RollingUpdate
+    rollingUpdate: {maxSurge: 1, maxUnavailable: 0}
+  selector:
+    matchLabels: {app: mecanica-os-service}
+  template:
+    metadata:
+      labels:
+        app: mecanica-os-service
+        tags.datadoghq.com/service: mecanica-os-service
+        tags.datadoghq.com/env: fase4
+        admission.datadoghq.com/enabled: "true"
+      annotations:
+        admission.datadoghq.com/java-lib.version: "1"
+        ad.datadoghq.com/mecanica-os-service.logs: '[{"source":"java","service":"mecanica-os-service"}]'
+        ad.datadoghq.com/mecanica-os-service.checks: >-
+          {"openmetrics":{"init_config":{},"instances":[{"openmetrics_endpoint":"http://%%host%%:8081/actuator/prometheus","namespace":"mecanica","metrics":[{"mecanica_ordens_servico_criadas_total":"ordens_servico.criadas"},{"mecanica_ordens_servico_status_transicoes_total":"ordens_servico.status.transicoes"},{"mecanica_ordens_servico_status_duracao_seconds":"ordens_servico.status.duracao"},{"mecanica_ordens_servico_processamento_falhas_total":"ordens_servico.processamento.falhas"}]}]}}
+    spec:
+      automountServiceAccountToken: false
+      terminationGracePeriodSeconds: 45
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 10001
+        runAsGroup: 10001
+        fsGroup: 10001
+        seccompProfile: {type: RuntimeDefault}
+      containers:
+        - name: mecanica-os-service
+          image: mecanica-os-service:release
+          imagePullPolicy: IfNotPresent
+          ports: [{name: http, containerPort: 8081}]
+          envFrom:
+            - configMapRef: {name: mecanica-os-service-config}
+            - secretRef: {name: mecanica-os-service-secret}
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities: {drop: [ALL]}
+          resources:
+            requests: {cpu: 250m, memory: 512Mi}
+            limits: {cpu: "1", memory: 1Gi}
+          volumeMounts:
+            - {name: tmp, mountPath: /tmp}
+          startupProbe:
+            httpGet: {path: /actuator/health/liveness, port: http}
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 30
+          readinessProbe:
+            httpGet: {path: /actuator/health/readiness, port: http}
+            periodSeconds: 10
+            timeoutSeconds: 5
+          livenessProbe:
+            httpGet: {path: /actuator/health/liveness, port: http}
+            periodSeconds: 20
+            timeoutSeconds: 5
+            failureThreshold: 3
+      volumes:
+        - name: tmp
+          emptyDir: {sizeLimit: 128Mi}

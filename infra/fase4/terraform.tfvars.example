@@ -1,0 +1,5 @@
+# Use the IAM ARN corresponding to the authenticated AWS Academy role.
+admin_principal_arn = "arn:aws:iam::123456789012:role/voclabs"
+# Replace with your public IP /32. GitHub-hosted runners need their own egress
+# allowed, or an explicitly reviewed broader CIDR. IAM authentication remains mandatory.
+api_allowed_cidrs = ["203.0.113.1/32"]

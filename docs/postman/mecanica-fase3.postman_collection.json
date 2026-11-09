@@ -1,0 +1,71 @@
+{
+  "info": {
+    "name": "Mecânica - Tech Challenge Fase 3",
+    "description": "Autenticação serverless e exemplos de consumo das APIs protegidas.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "https://3o3iqeu0b9.execute-api.us-east-1.amazonaws.com"
+    },
+    {
+      "key": "cpfCnpj",
+      "value": "52998224725"
+    },
+    {
+      "key": "accessToken",
+      "value": ""
+    }
+  ],
+  "item": [
+    {
+      "name": "Autenticação",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"cpfCnpj\": \"{{cpfCnpj}}\"\n}",
+          "options": { "raw": { "language": "json" } }
+        },
+        "url": "{{baseUrl}}/auth"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "const body = pm.response.json();",
+              "if (body.accessToken) pm.collectionVariables.set('accessToken', body.accessToken);"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Listar clientes",
+      "request": {
+        "method": "GET",
+        "auth": {
+          "type": "bearer",
+          "bearer": [{ "key": "token", "value": "{{accessToken}}", "type": "string" }]
+        },
+        "url": "{{baseUrl}}/clientes"
+      }
+    },
+    {
+      "name": "Listar ordens de serviço",
+      "request": {
+        "method": "GET",
+        "auth": {
+          "type": "bearer",
+          "bearer": [{ "key": "token", "value": "{{accessToken}}", "type": "string" }]
+        },
+        "url": "{{baseUrl}}/ordens-servico"
+      }
+    }
+  ]
+}
