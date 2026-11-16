@@ -39,8 +39,9 @@ public class OrdemDeServicoController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public OrdemDeServicoResponse criar(@RequestBody @Valid CriarOrdemDeServicoRequest request) {
-        return mapper.toResponse(criar.executar(new CriarOrdemDeServicoInput(usuario.getClienteId(),
-            veiculos.executar(request.placa()).getId(), operadores.executar(request.matriculaOperador()).getId())));
+        var veiculo = veiculos.executar(request.placa());
+        return mapper.toResponse(criar.executar(new CriarOrdemDeServicoInput(usuario.getClienteIdParaAbertura(veiculo.getClienteId()),
+            veiculo.getId(), operadores.executar(request.matriculaOperador()).getId())));
     }
     @Operation(summary = "Acompanhar publicamente o status projetado da OS")
     @GetMapping("/acompanhamento/{id}")
