@@ -1,0 +1,40 @@
+name: mecanica-os-local
+
+services:
+  postgres:
+    image: postgres:16
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: mecanica_os
+      POSTGRES_USER: mecanica_os
+      POSTGRES_PASSWORD: mecanica_os_local
+    ports:
+      - "127.0.0.1:5434:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U mecanica_os -d mecanica_os"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  api:
+    build: .
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/mecanica_os
+      SPRING_DATASOURCE_USERNAME: mecanica_os
+      SPRING_DATASOURCE_PASSWORD: mecanica_os_local
+      SERVER_PORT: "8080"
+      JWT_PUBLIC_KEY: ${JWT_PUBLIC_KEY:?Defina JWT_PUBLIC_KEY com a chave publica RSA}
+      JWT_ISSUER: ${JWT_ISSUER:-mecanica-auth}
+      APP_ENVIRONMENT: local
+    ports:
+      - "127.0.0.1:8081:8080"
+
+volumes:
+  postgres_data:

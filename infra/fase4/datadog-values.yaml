@@ -1,0 +1,42 @@
+datadog:
+  operator:
+    enabled: false
+  instrumentationCrd:
+    enabled: false
+  csi:
+    enabled: false
+  autoscaling:
+    workload:
+      enabled: false
+  apiKeyExistingSecret: datadog-secret
+  clusterName: mecanica-fase4
+  site: datadoghq.com
+  tags: [env:fase4, project:mecanica]
+  logs:
+    enabled: true
+    containerCollectAll: false
+  apm:
+    socketEnabled: true
+  kubeStateMetricsCore:
+    enabled: true
+  processAgent:
+    processCollection: false
+clusterAgent:
+  enabled: true
+  replicas: 1
+  admissionController:
+    enabled: true
+    mutateUnlabelled: false
+  resources:
+    requests: {cpu: 100m, memory: 256Mi}
+    limits: {cpu: 500m, memory: 512Mi}
+agents:
+  containers:
+    agent:
+      resources:
+        requests: {cpu: 100m, memory: 256Mi}
+        limits: {cpu: 500m, memory: 512Mi}
+    traceAgent:
+      resources:
+        requests: {cpu: 100m, memory: 128Mi}
+        limits: {cpu: 500m, memory: 384Mi}
