@@ -4,6 +4,8 @@ Participante: Mateus Borgonovi Francisco Drago - RM370507.
 
 ## Preparacao
 
+SMTP sera demonstrado no ambiente local ja validado. No Swagger AWS, rotas de notificacao nao aparecem quando NOTIFICACOES_ENABLED=false; o webhook tambem depende da configuracao habilitada. Nao habilite SMTP na AWS sem credenciais proprias.
+
 No PowerShell 7, na pasta mecanica-execution-service, execute `./scripts/abrir-swagger-aws.ps1 -CopiarToken`. O script abre tres abas por port-forward local: OS 19081, Billing 19082 e Execution 19083. Mantenha o terminal aberto; Enter encerra os encaminhamentos criados. O token fica no clipboard, vale 15 minutos e deve ser colado no Authorize de cada Swagger antes de gravar. Nao filme JWT, senhas, Secrets ou cookies. Reinicie o script para renovar o token.
 
 Use registros novos em cada ensaio. Cadastre cliente, operador e veiculo no OS. Use CPF valido de teste, placa ainda nao cadastrada e matricula nova. O Swagger apresenta o schema de cada corpo. Guarde placa e matricula; nao e preciso consultar banco.
