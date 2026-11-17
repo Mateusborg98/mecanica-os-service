@@ -116,3 +116,5 @@ Os [manifests Kubernetes](k8s/README.md) e o workflow CD estão preparados. A in
 - [Roteiro completo pelo Swagger](docs/roteiro-swagger-video.md)
 - [Matriz de requisitos](docs/matriz-requisitos-fase-4.md)
 - [CD do OS validado em 17/11](https://github.com/Mateusborg98/mecanica-os-service/actions/runs/44090636491)
+
+- [Tres deploys e validacao integrada final](docs/validacao-final-2026-11-17.md)

@@ -14,9 +14,9 @@ Conferida contra `12SOAT - Fase 4 - Tech challenge.pdf`. Implementação, teste 
 | Saga e compensação | Recusa libera estoque; cancelamento anterior à criação; testes com broker indisponível | Validado nos cenários automatizados; após execução física há recuperação para frente, sem estorno automático |
 | Unitários, BDD e cobertura mínima 80% | JaCoCo, testes de cada serviço e três cenários distribuídos | CI aprovado nos commits abaixo; pagamento do BDD é simulado |
 | SonarQube ou similar | PMD obrigatório em Maven verify/CI | Implementado; relatórios disponibilizados pelo CI |
-| CI/CD independente | Workflows por repositório | OS CD concluido em 17/11; Billing e Execution em validacao final |
+| CI/CD independente | Workflows por repositório | Tres CD concluidos em 17/11; ver validacao-final-2026-11-17.md |
 | Main protegida | PR obrigatório e checks automáticos configurados | Configurado; integracoes seguem por PR com checks obrigatorios |
-| Observabilidade da Fase 3 | Logs, métricas, correlação e configuração Datadog | Evidência em AWS/Datadog pendente |
+| Observabilidade da Fase 3 | Logs, métricas, correlação e configuração Datadog | Coleta de logs/traces confirmada nos agentes; visualizacao do painel para video pendente |
 | Documentação e contratos | Arquitetura atual e collections Postman nos serviços | Documentação preparada; collections são roteiro manual, não prova de chamadas executadas |
 | Vídeo até 15 minutos | Roteiro de demonstração | Gravação/upload e link pendentes |
 | PDF do portal | Texto-base com estrutura de entrega | Participante identificado e PDF preparado; falta link do video e conclusao das evidencias externas |
@@ -37,3 +37,7 @@ Porcentagens conferidas em 17/11 diretamente nos jacoco.xml baixados dos artefat
 OS CD concluido: https://github.com/Mateusborg98/mecanica-os-service/actions/runs/44090636491 . Dois cenarios AWS repetidos com sucesso em 17/11: aprovacao ate cobranca pendente e recusa com compensacao. Pagamento Mercado Pago permanece pendente (WCS-59172); nao marcar pagamento manualmente. SMTP recebido localmente em 16/11; envio AWS depende de configuracao propria. Video e seu link so podem ser concluidos apos gravacao.
 
 Em 17/11, a sessao Academy encerrou e retornou explicit deny voc-cancel-cred; o CD Billing [44131509282](https://github.com/Mateusborg98/mecanica-billing-service/actions/runs/44131509282) ficou bloqueado antes da publicacao. Renovar credenciais e reexecutar o job; isso nao invalida os testes aprovados. Billing e Execution tiveram os PRs integrados. O Swagger dos dois foi validado localmente por HTTP 200, contrato OpenAPI 3.1, rotas publicas sem bearer e rotas administrativas retornando 401 sem JWT.
+
+## Fechamento dos deploys
+
+As tres reexecucoes terminaram com sucesso apos renovar a sessao. Swaggers e cenarios distribuidos validados na AWS. Consulte [evidencias finais](validacao-final-2026-11-17.md). O paragrafo sobre voc-cancel-cred registra a falha anterior, ja superada.
