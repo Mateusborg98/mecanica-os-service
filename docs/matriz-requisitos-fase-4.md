@@ -19,19 +19,21 @@ Conferida contra `12SOAT - Fase 4 - Tech challenge.pdf`. Implementação, teste 
 | Observabilidade da Fase 3 | Logs, métricas, correlação e configuração Datadog | Evidência em AWS/Datadog pendente |
 | Documentação e contratos | Arquitetura atual e collections Postman nos serviços | Documentação preparada; collections são roteiro manual, não prova de chamadas executadas |
 | Vídeo até 15 minutos | Roteiro de demonstração | Gravação/upload e link pendentes |
-| PDF do portal | Texto-base com estrutura de entrega | Faltam identificação dos participantes, link do vídeo e evidências externas finais |
+| PDF do portal | Texto-base com estrutura de entrega | Participante identificado e PDF preparado; falta link do video e conclusao das evidencias externas |
 
 ## CI e cobertura
 
-As porcentagens são das validações já registradas, não uma nova medição feita durante esta revisão documental. Consulte os artefatos da execução correspondente antes da entrega final.
+Porcentagens conferidas em 17/11 diretamente nos jacoco.xml baixados dos artefatos dos CIs abaixo. O BDD distribuido usa os commits OS d5518bc e Billing fe0d4d4 fixados no workflow do Execution.
 
 | Serviço | Commit validado | Cobertura de linhas registrada | CI |
 |---|---|---|---|
-| OS | `21fb0c541adc75da95a125ee1b1889f37b23e860` | 93,07% | [Execução](https://github.com/Mateusborg98/mecanica-os-service/actions/runs/42662648525) |
-| Billing | `4ba6caa9379d6771eef092b7663f2bafb5766a80` | 89,94% | [Execução](https://github.com/Mateusborg98/mecanica-billing-service/actions/runs/42662614822) |
-| Execution | `e6849e04bcd5d2aac895a27c52659ca90f5c3096` | 87,98% | [Execução e BDD](https://github.com/Mateusborg98/mecanica-execution-service/actions/runs/42662910263) |
+| OS | `d5518bc6e9393b7fa5aec447ac50a75d2046f77a` | 93,13% | [Execução](https://github.com/Mateusborg98/mecanica-os-service/actions/runs/44092179490) |
+| Billing | `fe0d4d4b70bb7b6d74e75b9766f5c9d953f24466` | 89,57% | [Execução](https://github.com/Mateusborg98/mecanica-billing-service/actions/runs/44092005684) |
+| Execution | `3742d651b347326da60fa12ad050380027fff44b` | 87,14% | [Execução e BDD](https://github.com/Mateusborg98/mecanica-execution-service/actions/runs/44092211619) |
 
 
 ## Validacao externa
 
 OS CD concluido: https://github.com/Mateusborg98/mecanica-os-service/actions/runs/44090636491 . Dois cenarios AWS repetidos com sucesso em 17/11: aprovacao ate cobranca pendente e recusa com compensacao. Pagamento Mercado Pago permanece pendente (WCS-59172); nao marcar pagamento manualmente. SMTP recebido localmente em 16/11; envio AWS depende de configuracao propria. Video e seu link so podem ser concluidos apos gravacao.
+
+Em 17/11, a sessao Academy encerrou e retornou explicit deny voc-cancel-cred; o CD Billing [44131509282](https://github.com/Mateusborg98/mecanica-billing-service/actions/runs/44131509282) ficou bloqueado antes da publicacao. Renovar credenciais e reexecutar o job; isso nao invalida os testes aprovados. Billing e Execution tiveram os PRs integrados. O Swagger dos dois foi validado localmente por HTTP 200, contrato OpenAPI 3.1, rotas publicas sem bearer e rotas administrativas retornando 401 sem JWT.
