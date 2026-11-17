@@ -89,7 +89,7 @@ O BDD dos três serviços está no Execution, em `tests/fluxo-distribuido`. Seu 
 
 O repositório contém Dockerfile, manifests Kubernetes e workflows. Parte dos artefatos de infraestrutura/arquitetura foi herdada da Fase 3 e precisa ser conferida para a implantação final dos três serviços. A presença desses arquivos não comprova deploy, proteção de branches nem execução remota da CI.
 
-A aplicação expõe Actuator, métricas Prometheus, logs JSON e `X-Correlation-ID`. AWS Academy e Datadog são o destino planejado; a evidência final de implantação e observabilidade distribuída continua necessária. Referências herdadas: [arquitetura](docs/architecture.md), [modelo relacional](docs/relational-model.md) e [checklist](docs/delivery-checklist.md).
+A aplicação expõe Actuator, métricas Prometheus, logs JSON e `X-Correlation-ID`. AWS Academy está implantado com Datadog; a [validação integrada](docs/validacao-integrada-aws-2026-11-16.md) cobre aprovação e recusa. Ainda faltam CD remoto e evidências dos painéis do fluxo completo. Referências herdadas: [arquitetura](docs/architecture.md), [modelo relacional](docs/relational-model.md) e [checklist](docs/delivery-checklist.md).
 
 [Validação local de 05/11/2026](docs/validacao-2026-11-05.md): OS, Billing e BDD distribuído; limites e pendências explícitos.
 
@@ -104,3 +104,15 @@ Plano atual: [checklist de fechamento da Fase 4](docs/entrega-fase-4.md).
 ## Preparação de implantação da Fase 4
 
 Os [manifests Kubernetes](k8s/README.md) e o workflow CD estão preparados. A infraestrutura compartilhada e a estimativa de custos ficam em mecanica-os-service/infra/fase4/README.md. A preparação local não comprova provisionamento AWS ou execução remota do CD.
+
+## Revisão de entrega em 11/11/2026
+
+[Collection Postman das operações principais](docs/postman/README.md). Testes externos de pagamento e nova tentativa SMTP foram adiados pelo responsável; não representam validação concluída.
+
+[Arquitetura atual da Fase 4](docs/architecture-fase-4.md), [matriz com evidências de cobertura e CI](docs/matriz-requisitos-fase-4.md) e [roteiro de demonstração](docs/roteiro-demonstracao-fase-4.md).
+
+## Ensaio e evidencias finais
+
+- [Roteiro completo pelo Swagger](docs/roteiro-swagger-video.md)
+- [Matriz de requisitos](docs/matriz-requisitos-fase-4.md)
+- [CD do OS validado em 17/11](https://github.com/Mateusborg98/mecanica-os-service/actions/runs/44090636491)

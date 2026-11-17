@@ -4,16 +4,18 @@ Destino: AWS Academy, `us-east-1`, saldo informado de US$ 50. Esta pasta é a in
 
 ## Topologia proposta
 
-- EKS 1.36 em suporte padrão, um Managed Node Group com um `t3.xlarge` (4 vCPU, 16 GiB), capacidade fixa de um nó.
+- EKS 1.36 em suporte padrão, um Managed Node Group com dois `t3.large` (2 vCPU, 8 GiB cada), capacidade fixa de dois nós.
 - VPC e sub-redes públicas padrão preexistentes. Endpoint Kubernetes autenticado, com allowlist de CIDRs; endpoint privado também habilitado. Não há regras de entrada pública para as APIs ou bancos.
 - Sem NAT Gateway, RDS ou Load Balancer. Os Services são internos. Acesso de demonstração por `kubectl port-forward` em localhost.
 - PostgreSQL da OS, PostgreSQL do Execution, MongoDB do Billing e RabbitMQ em StatefulSets independentes, um volume EBS gp3 criptografado de 10 GiB para cada um.
 - EBS CSI e metrics-server como add-ons; ECR separado por serviço, tags imutáveis por SHA do commit.
 - Datadog instalado separadamente com Secret preexistente. Cada API tem identificação própria, logs e injeção do agente Java.
 
-É um ambiente temporário de demonstração, sem alta disponibilidade. Uma falha no único nó interrompe todos os serviços até a recuperação. Volumes de dados persistem fora do disco do nó; isso não substitui backup. O nó permanece na mesma zona para permitir remontar os volumes EBS em uma substituição. Não atualizar o node group durante a gravação: uma atualização gerenciada pode iniciar capacidade temporária extra.
+É um ambiente temporário de demonstração, sem alta disponibilidade. Os bancos têm uma réplica; falhas de nó podem interromper o serviço até reagendamento e remontagem dos volumes. Volumes de dados persistem fora do disco do nó; isso não substitui backup. O nó permanece na mesma zona para permitir remontar os volumes EBS em uma substituição. Não atualizar o node group durante a gravação: uma atualização gerenciada pode iniciar capacidade temporária extra.
 
-## Estimativa de custo
+## Estimativa de custo (historica; atualizar para t3.large)
+
+Em 12/11 o tamanho foi corrigido para t3.large: o Learner Lab permite ate large. A tabela abaixo registra a estimativa anterior com xlarge e nao representa a configuracao atual. Revalidar custos antes de planejar a duracao; observar memoria e pods Pending com o no menor.
 
 Premissas: Linux On-Demand em us-east-1, um nó, um IPv4 público, 70 GiB gp3 (30 do nó + 40 de dados), sem IOPS/throughput adicionais. Valores de referência consultados em 06/11/2026; revalidar antes de aplicar.
 
@@ -150,3 +152,14 @@ Não há comando automático que apague volumes, imagens ou dados nesta entrega.
 ## Evidência desta preparação
 
 Consulte [validação local de infraestrutura](../../docs/validacao-infra-fase4-2026-11-06.md). Nenhum apply Terraform, instalação Helm, publicação de imagem ou deploy remoto foi executado nesta etapa.
+
+## Bootstrap assistido do laboratorio
+
+Os scripts desta pasta usam explicitamente o contexto `mecanica-fase4` da conta Academy validada, sem depender do contexto Kubernetes corrente. Requerem o kubectl 1.36 instalado em `%LOCALAPPDATA%/MecanicaDevTools/kubernetes-1.36` e kubeconfig atualizado.
+
+- `bootstrap-dados-lab.ps1`: cria Secrets de bancos/broker com senhas aleatorias em memoria, preserva Secrets existentes e aplica a plataforma. Nao imprime nem grava as senhas em arquivos. Conferir PVCs e readiness depois; aplicacao de manifests nao comprova inicializacao.
+- `configurar-datadog-cluster.ps1`: executar no terminal que contem `DD_API_KEY`. Valida a chave no site US1 e cria `datadog-secret` via entrada padrao, sem arquivo intermediario. Exige namespace `datadog` criado e recusa sobrescrever Secret existente. Nao instala o chart.
+
+Os arquivos locais `*.tfvars.json`, planos, logs do plano e state ficam fora do Git. Preservar o state para encerramento posterior. As credenciais das APIs devem corresponder aos Secrets criados; nao gerar novas senhas para bancos ja inicializados.
+
+Em 13/11, o node group foi ajustado para dois t3.large: antes das APIs, as reservas eram 1400m de CPU, e as três APIs exigem mais 750m, acima dos cerca de 1930m alocáveis em um nó. O segundo nó e seu agente Datadog aumentam o custo; revalidar saldo e duração do laboratório. Nenhum banco ou volume foi substituído.
