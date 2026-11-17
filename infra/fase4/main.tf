@@ -109,7 +109,7 @@ resource "aws_eks_node_group" "lab" {
   node_role_arn   = data.aws_iam_role.lab.arn
   # One AZ keeps replacements compatible with the zonal EBS volumes.
   subnet_ids     = [local.subnets[0]]
-  instance_types = ["t3.xlarge"]
+  instance_types = ["t3.large"]
   capacity_type  = "ON_DEMAND"
   ami_type       = "AL2023_x86_64_STANDARD"
   launch_template {
@@ -117,9 +117,9 @@ resource "aws_eks_node_group" "lab" {
     version = aws_launch_template.node.latest_version
   }
   scaling_config {
-    min_size     = 1
-    desired_size = 1
-    max_size     = 1
+    min_size     = 2
+    desired_size = 2
+    max_size     = 2
   }
   update_config { max_unavailable = 1 }
   depends_on = [aws_eks_access_policy_association.operator]

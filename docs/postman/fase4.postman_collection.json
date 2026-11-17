@@ -1,0 +1,158 @@
+{
+  "info": {
+    "name": "Mecanica Fase 4 - os",
+    "description": "Operacoes principais conferidas contra controllers em 11/11/2026. Uso manual; cenarios alternativos. Credenciais somente no ambiente local do Postman.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "value": "{{jwt}}",
+        "type": "string",
+        "key": "token"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "value": "http://localhost:18081",
+      "type": "string",
+      "key": "baseUrl"
+    },
+    {
+      "value": "",
+      "type": "string",
+      "key": "jwt"
+    },
+    {
+      "value": "",
+      "type": "string",
+      "key": "ordemId"
+    },
+    {
+      "value": "",
+      "type": "string",
+      "key": "reparoId"
+    },
+    {
+      "value": "",
+      "type": "string",
+      "key": "orcamentoId"
+    },
+    {
+      "value": "",
+      "type": "string",
+      "key": "servicoId"
+    },
+    {
+      "value": "",
+      "type": "string",
+      "key": "pecaId"
+    },
+    {
+      "value": "",
+      "type": "string",
+      "key": "placa"
+    },
+    {
+      "value": "",
+      "type": "string",
+      "key": "matriculaOperador"
+    },
+    {
+      "value": "",
+      "type": "string",
+      "key": "destinatario"
+    },
+    {
+      "value": "",
+      "type": "string",
+      "key": "codigoServico"
+    },
+    {
+      "value": "",
+      "type": "string",
+      "key": "sku"
+    }
+  ],
+  "item": [
+    {
+      "response": [],
+      "name": "GET /ordens-servico",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{baseUrl}}/ordens-servico",
+        "description": "Operação manual. Preencha os identificadores com respostas do ambiente. Não execute toda a collection em sequência: aprovação e recusa são alternativas."
+      }
+    },
+    {
+      "response": [],
+      "name": "POST /ordens-servico",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "value": "application/json",
+            "key": "Content-Type"
+          }
+        ],
+        "url": "{{baseUrl}}/ordens-servico",
+        "description": "Operação manual. Preencha os identificadores com respostas do ambiente. Não execute toda a collection em sequência: aprovação e recusa são alternativas.",
+        "body": {
+          "raw": "{\"placa\":\"{{placa}}\",\"matriculaOperador\":{{matriculaOperador}}}",
+          "mode": "raw",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      }
+    },
+    {
+      "response": [],
+      "name": "GET /ordens-servico/acompanhamento/{{ordemId}}",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{baseUrl}}/ordens-servico/acompanhamento/{{ordemId}}",
+        "description": "Operação manual. Preencha os identificadores com respostas do ambiente. Não execute toda a collection em sequência: aprovação e recusa são alternativas.",
+        "auth": {
+          "type": "noauth"
+        }
+      }
+    },
+    {
+      "response": [],
+      "name": "GET /ordens-servico/{{ordemId}}/historico",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{baseUrl}}/ordens-servico/{{ordemId}}/historico",
+        "description": "Operação manual. Preencha os identificadores com respostas do ambiente. Não execute toda a collection em sequência: aprovação e recusa são alternativas."
+      }
+    },
+    {
+      "response": [],
+      "name": "GET /ordens-servico/{{ordemId}}/reparo",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{baseUrl}}/ordens-servico/{{ordemId}}/reparo",
+        "description": "Operação manual. Preencha os identificadores com respostas do ambiente. Não execute toda a collection em sequência: aprovação e recusa são alternativas."
+      }
+    },
+    {
+      "response": [],
+      "name": "POST /ordens-servico/{{ordemId}}/entregar",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "url": "{{baseUrl}}/ordens-servico/{{ordemId}}/entregar",
+        "description": "Operação manual. Preencha os identificadores com respostas do ambiente. Não execute toda a collection em sequência: aprovação e recusa são alternativas."
+      }
+    }
+  ]
+}

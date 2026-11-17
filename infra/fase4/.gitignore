@@ -4,3 +4,7 @@
 *.tfstate*
 *.tfplan
 *.env
+
+*.tfvars.json
+lab-plan.log
+capacity-plan.log
