@@ -21,7 +21,7 @@ spec:
         admission.datadoghq.com/java-lib.version: "1"
         ad.datadoghq.com/mecanica-os-service.logs: '[{"source":"java","service":"mecanica-os-service"}]'
         ad.datadoghq.com/mecanica-os-service.checks: >-
-          {"openmetrics":{"init_config":{},"instances":[{"openmetrics_endpoint":"http://%%host%%:8081/actuator/prometheus","namespace":"mecanica","metrics":[{"mecanica_ordens_servico_criadas_total":"ordens_servico.criadas"},{"mecanica_ordens_servico_status_transicoes_total":"ordens_servico.status.transicoes"},{"mecanica_ordens_servico_status_duracao_seconds":"ordens_servico.status.duracao"},{"mecanica_ordens_servico_processamento_falhas_total":"ordens_servico.processamento.falhas"}]}]}}
+          {"openmetrics":{"init_config":{},"instances":[{"openmetrics_endpoint":"http://%%host%%:8081/actuator/prometheus","namespace":"mecanica","metrics":[{"mecanica_ordens_servico_criadas":"ordens_servico.criadas"},{"mecanica_ordens_servico_status_transicoes":"ordens_servico.status.transicoes"},{"mecanica_ordens_servico_status_duracao_seconds":"ordens_servico.status.duracao"},{"mecanica_ordens_servico_processamento_falhas":"ordens_servico.processamento.falhas"}]}]}}
     spec:
       automountServiceAccountToken: false
       terminationGracePeriodSeconds: 45
@@ -65,3 +65,4 @@ spec:
       volumes:
         - name: tmp
           emptyDir: {sizeLimit: 128Mi}
+
